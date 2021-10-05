@@ -52,5 +52,10 @@
             <td>09/30</td>
             <td><a href="Week6_SWArchitecture_Devops.pdf">Software Architecture</a></td>
         </tr>
+        <tr>
+            <td>7</td>
+            <td>10/05</td>
+            <td><a href="Week7_Tuesday.pdf">Virtualization & Containerization</a></td>
+        </tr>
     </tbody>
 </table>
