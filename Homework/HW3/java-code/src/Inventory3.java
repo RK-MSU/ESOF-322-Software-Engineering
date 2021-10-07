@@ -3,11 +3,11 @@
 /**
  * Inventory3 class
  * 
- * This inventory module extends the Inventory class.
+ * This inventory module extends the InventoryModule class.
  * 
  * The default sorting method is: Quick Sort
  */
-public class Inventory3 extends Inventory {
+public class Inventory3 extends InventoryModule {
 
     public Inventory3() {
      // call parent constructor

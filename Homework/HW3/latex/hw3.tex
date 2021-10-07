@@ -52,6 +52,50 @@
 \newpage
 \section*{Java Code}
 
+\subsection*{Console Output}
+\begin{lstlisting}
+----------------------------------------
+ESOF-322: Homework 3
+----------------------------------------
+
+Step 1: Select an Inventory Module
+----------------------------------------
+1 - Inventory1
+2 - Inventory2
+3 - Inventory3
+('c' to exit) > 1
+
+New Inventory Module Created
+----------------------------------------
+Inventory Module: Inventory1 
+Default sorting method: BubbleSort
+
+Step 2: Perform (default) Sorting Method
+----------------------------------------
+--> Inventory1::sort()
+The sorting method is: BubbleSort
+--> BubbleSort::sort()
+Performing BubbleSort...
+
+Step 3: Request User Selection (Sorting Method)
+----------------------------------------
+1 - BubbleSort
+2 - MergeSort
+3 - QuickSort
+('c' to exit) > 3
+
+Step 4: Dynamically Change Sorting Method
+----------------------------------------
+--> Inventory1::setSortMethod(ISortingMethod method)
+Dynamically set sorting method to: QuickSort
+
+Step 5: Perform Sorting Method
+----------------------------------------
+--> Inventory1::sort()
+The sorting method is: QuickSort
+--> QuickSort::sort()
+Performing Quicksort...
+\end{lstlisting}
 
 \subsection*{Client Class}
 \begin{lstlisting}[language=Java]
@@ -72,7 +116,7 @@ public class Client {
     public static void main(String[] args) {
 
         // initialize local Inventory variable
-        Inventory inventory = null;
+        InventoryModule inventory = null;
         // initialize scanner, to read in user input from console
         Scanner console = new Scanner(System.in);
         // variable to store user input
@@ -80,13 +124,12 @@ public class Client {
         int user_int_selection = 0;
 
         /*
-         * The following variables are used to by the application.
-         * Either for output to the console or to maintain the 
-         * running state.
+         * The following variables are used to by the application. Either for output to
+         * the console or to maintain the running state
          */
 
-        Inventory[] inventory_arr = new Inventory[3];
-        int current_inventory_index = 0;
+        InventoryModule[] inventory_arr = new InventoryModule[3];
+        int inv_index = 0;
         // string "constant", used for output to the user
         String dv = "----------------------------------------";
         // continue running application loop with true
@@ -125,9 +168,9 @@ public class Client {
                 continue;
             }
 
-            current_inventory_index = user_int_selection - 1;
+            inv_index = user_int_selection - 1;
 
-            if (inventory_arr[current_inventory_index] == null) {
+            if (inventory_arr[inv_index] == null) {
 
                 System.out.printf("\n%s\n%s\n", "New Inventory Module Created", dv);
                 switch (user_int_selection) {
@@ -144,16 +187,16 @@ public class Client {
                         System.out.println("\nInvalid input: " + user_selection);
                         continue;
                 }
-                inventory_arr[current_inventory_index] = inventory;
+                inventory_arr[inv_index] = inventory;
             } else {
-                inventory = inventory_arr[current_inventory_index];
+                inventory = inventory_arr[inv_index];
             }
 
             // Step 2: Perform default sorting method
             // ------------------------------------------------------
             //
             System.out.printf("\n%s\n%s\n", "Step 2: Perform (default) Sorting Method", dv);
-            inventory.sort();
+            inventory.preformSort();
 
             // Step 3: Request User Selection
             // ------------------------------------------------------
@@ -180,20 +223,23 @@ public class Client {
             //
             
             System.out.printf("\n%s\n%s", "Step 4: Dynamically Change Sorting Method", dv);
+            ISortingMethod new_sorting_method;
             switch (user_selection) {
                 case "1": // Bubble Sort
-                    inventory.setSortMethod(new BubbleSort()); // Change dynamically to BubbleSort
+                    new_sorting_method = new BubbleSort();
                     break;
                 case "2": // Merge Sort
-                    inventory.setSortMethod(new MergeSort()); // Change dynamically to MergeSort
+                    new_sorting_method = new MergeSort();
                     break;
                 case "3": // Quick Sort
-                    inventory.setSortMethod(new QuickSort()); // Change dynamically to QuickSort
+                    new_sorting_method = new QuickSort();
                     break;
                 default: // Invalid selection from user input
                     System.out.println("\nInvalid input: " + user_selection);
                     continue;
             }
+            
+            inventory.setSortMethod(new_sorting_method); // Change dynamically to BubbleSort
 
             // Step 5: Perform Sort
             // ------------------------------------------------------
@@ -201,7 +247,7 @@ public class Client {
             //
             
             System.out.printf("\n%s\n%s\n", "Step 5: Perform Sorting Method", dv);
-            inventory.sort();
+            inventory.preformSort();
 
         } while (running); // END of application's loop
         
@@ -210,9 +256,7 @@ public class Client {
     } // END of Client::main method
 
 } // END of Client class
-
 \end{lstlisting}
-
 
 \subsection*{ISortingMethod Interface}
 \begin{lstlisting}[language=Java]
@@ -238,7 +282,6 @@ public interface ISortingMethod {
     public void sort();
     
 } // END of ISortingMethod class
-
 \end{lstlisting}
 
 \subsection*{BubbleSort Class}
@@ -307,9 +350,9 @@ public class QuickSort implements ISortingMethod {
 
 \end{lstlisting}
 
-\subsection*{Inventory Class}
+\subsection*{InventoryModule Class}
 \begin{lstlisting}[language=Java]
-// Inventory.java
+// InventoryModule.java
 
 /**
  * Inventory class (Abstract)
@@ -326,16 +369,16 @@ public class QuickSort implements ISortingMethod {
  * the behavior at runtime.
  *
  */
-abstract public class Inventory {
+abstract public class InventoryModule {
 
     // The interface used by each unique sorting method type.
     public ISortingMethod sorting_method;
     
     
     // constructor
-    public Inventory(ISortingMethod _sorting_method) {
+    public InventoryModule(ISortingMethod sort_method) {
         // set the default sorting method
-        sorting_method = _sorting_method;
+        sorting_method = sort_method;
         // output statement to user
         System.out.println("Inventory Module: " + 
                 this.toString().split("@")[0] +
@@ -351,7 +394,7 @@ abstract public class Inventory {
      * Invokes the sorting method behavior
      * 
      */
-    public void sort() {
+    public void preformSort() {
         // output statement to user
         System.out.println("--> "+this.toString().split("@")[0] + "::sort()\nThe sorting method is: " + sorting_method.toString().split("@")[0]);
         sorting_method.sort();
@@ -365,16 +408,15 @@ abstract public class Inventory {
      * changes the default sorting method (dynamically) to the new one chosen by the user
      * 
      */
-    public void setSortMethod(ISortingMethod method) {
+    public void setSortMethod(ISortingMethod new_sort_method) {
         // dynamically set the sorting method (behavior)
-        sorting_method = method;
+        sorting_method = new_sort_method;
         // cleanly prints out the new default sorting method to the user
         System.out.println("\n--> "+this.toString().split("@")[0]+"::setSortMethod(ISortingMethod method)\nDynamically set sorting method to: " + sorting_method.toString().split("@")[0]);
     
     } // END of setSortMethod()
 
 } // END of Inventory class
-
 \end{lstlisting}
 
 \subsection*{Inventory1 Class}
@@ -384,11 +426,11 @@ abstract public class Inventory {
 /**
  * Inventory1 class
  * 
- * This inventory module extends the Inventory class.
+ * This inventory module extends the InventoryModule class.
  * 
  * The default sorting method is: Bubble Sort
  */
-public class Inventory1 extends Inventory {
+public class Inventory1 extends InventoryModule {
 
     // constructor
     public Inventory1() {
@@ -398,7 +440,6 @@ public class Inventory1 extends Inventory {
     } // END of constructor
 
 } // END of Inventory1 class
-
 \end{lstlisting}
 
 \subsection*{Inventory2 Class}
@@ -408,11 +449,11 @@ public class Inventory1 extends Inventory {
 /**
  * Inventory2 class
  * 
- * This inventory module extends the Inventory class.
+ * This inventory module extends the InventoryModule class.
  * 
  * The default sorting method is: Merge Sort
  */
-public class Inventory2 extends Inventory {
+public class Inventory2 extends InventoryModule {
 
     // constructor
     public Inventory2() {
@@ -422,7 +463,6 @@ public class Inventory2 extends Inventory {
     } // END of constructor
 
 } // END of Inventory2 class
-
 \end{lstlisting}
 
 \subsection*{Inventory3 Class}
@@ -432,11 +472,11 @@ public class Inventory2 extends Inventory {
 /**
  * Inventory3 class
  * 
- * This inventory module extends the Inventory class.
+ * This inventory module extends the InventoryModule class.
  * 
  * The default sorting method is: Quick Sort
  */
-public class Inventory3 extends Inventory {
+public class Inventory3 extends InventoryModule {
 
     public Inventory3() {
      // call parent constructor
@@ -445,9 +485,14 @@ public class Inventory3 extends Inventory {
     } // END of constructor
 
 } // END of Inventory3 class
-
 \end{lstlisting}
 
 \newpage
 \section*{Sequence Diagram}
+\includegraphics[width=\linewidth]{Sequence-Diagram-1.png}
+Note: "Fetch Inventory" Alternative Fragment is on the next page.
+\newpage
+\includegraphics[width=\linewidth]{Sequence-Diagram-2.png}
+
+
 \end{document}

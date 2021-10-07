@@ -3,11 +3,11 @@
 /**
  * Inventory2 class
  * 
- * This inventory module extends the Inventory class.
+ * This inventory module extends the InventoryModule class.
  * 
  * The default sorting method is: Merge Sort
  */
-public class Inventory2 extends Inventory {
+public class Inventory2 extends InventoryModule {
 
     // constructor
     public Inventory2() {

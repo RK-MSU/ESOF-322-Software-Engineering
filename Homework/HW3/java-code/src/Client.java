@@ -15,7 +15,7 @@ public class Client {
     public static void main(String[] args) {
 
         // initialize local Inventory variable
-        Inventory inventory = null;
+        InventoryModule inventory = null;
         // initialize scanner, to read in user input from console
         Scanner console = new Scanner(System.in);
         // variable to store user input
@@ -27,8 +27,8 @@ public class Client {
          * the console or to maintain the running state
          */
 
-        Inventory[] inventory_arr = new Inventory[3];
-        int current_inventory_index = 0;
+        InventoryModule[] inventory_arr = new InventoryModule[3];
+        int inv_index = 0;
         // string "constant", used for output to the user
         String dv = "----------------------------------------";
         // continue running application loop with true
@@ -67,9 +67,9 @@ public class Client {
                 continue;
             }
 
-            current_inventory_index = user_int_selection - 1;
+            inv_index = user_int_selection - 1;
 
-            if (inventory_arr[current_inventory_index] == null) {
+            if (inventory_arr[inv_index] == null) {
 
                 System.out.printf("\n%s\n%s\n", "New Inventory Module Created", dv);
                 switch (user_int_selection) {
@@ -86,16 +86,16 @@ public class Client {
                         System.out.println("\nInvalid input: " + user_selection);
                         continue;
                 }
-                inventory_arr[current_inventory_index] = inventory;
+                inventory_arr[inv_index] = inventory;
             } else {
-                inventory = inventory_arr[current_inventory_index];
+                inventory = inventory_arr[inv_index];
             }
 
             // Step 2: Perform default sorting method
             // ------------------------------------------------------
             //
             System.out.printf("\n%s\n%s\n", "Step 2: Perform (default) Sorting Method", dv);
-            inventory.sort();
+            inventory.preformSort();
 
             // Step 3: Request User Selection
             // ------------------------------------------------------
@@ -146,7 +146,7 @@ public class Client {
             //
             
             System.out.printf("\n%s\n%s\n", "Step 5: Perform Sorting Method", dv);
-            inventory.sort();
+            inventory.preformSort();
 
         } while (running); // END of application's loop
         

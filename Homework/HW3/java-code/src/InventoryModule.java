@@ -1,4 +1,4 @@
-// Inventory.java
+// InventoryModule.java
 
 /**
  * Inventory class (Abstract)
@@ -15,14 +15,14 @@
  * the behavior at runtime.
  *
  */
-abstract public class Inventory {
+abstract public class InventoryModule {
 
     // The interface used by each unique sorting method type.
     public ISortingMethod sorting_method;
     
     
     // constructor
-    public Inventory(ISortingMethod sort_method) {
+    public InventoryModule(ISortingMethod sort_method) {
         // set the default sorting method
         sorting_method = sort_method;
         // output statement to user
@@ -40,7 +40,7 @@ abstract public class Inventory {
      * Invokes the sorting method behavior
      * 
      */
-    public void sort() {
+    public void preformSort() {
         // output statement to user
         System.out.println("--> "+this.toString().split("@")[0] + "::sort()\nThe sorting method is: " + sorting_method.toString().split("@")[0]);
         sorting_method.sort();
